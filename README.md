@@ -109,6 +109,10 @@ Canonical recognition does not imply provider support, and provider support does
 
 ## Architecture
 
+```
+Application → TranslationService → TranslationProvider → Provider adapter → Local model
+```
+
 The core package works without any provider installed.
 
 ## Errors

@@ -11,3 +11,7 @@ dist/
 
 *.argosmodel
 *.lock
+
+.venv/
+venv/
+.env

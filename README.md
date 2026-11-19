@@ -2,7 +2,7 @@
 
 **Offline-first translation and accessibility tools for Ethiopian languages, built around local AI providers.**
 
-![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)
 ![Status](https://img.shields.io/badge/status-early%20stage-orange)
 ![Offline first](https://img.shields.io/badge/offline-first-success)
 
@@ -40,6 +40,7 @@ Install a model once (this step needs internet; translation afterwards is local)
 
 ```python
 import argostranslate.package
+
 argostranslate.package.install_from_path("/path/to/your-model.argosmodel")
 ```
 

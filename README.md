@@ -40,6 +40,7 @@ Install a model once (this step needs internet; translation afterwards is local)
 
 ```python
 import argostranslate.package
+
 argostranslate.package.install_from_path("/path/to/your-model.argosmodel")
 ```
 

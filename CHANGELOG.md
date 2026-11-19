@@ -13,3 +13,4 @@ All notable changes to this project will be documented here.
 - Documented explicit local model installation and offline provider behavior.
 - Renamed the repository to open-local-ai and added project links and keywords to the package metadata.
 - Added an optional NLLB-200 provider (CTranslate2) for local Amharic, Afaan Oromo, Tigrinya, and English translation. Quality is not yet evaluated with native speakers.
+- Fixed the NLLB language code for Afaan Oromo (now gaz_Latn, West Central Oromo). Verified with a real model for Amharic and Tigrinya; Afaan Oromo is re-verified separately.

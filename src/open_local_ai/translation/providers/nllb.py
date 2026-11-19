@@ -17,7 +17,7 @@ from open_local_ai.core.models import TranslationRequest, TranslationResult
 
 _NLLB_CODES: dict[str, str] = {
     "am": "amh_Ethi",
-    "om": "orm_Latn",
+    "om": "gaz_Latn",
     "ti": "tir_Ethi",
     "en": "eng_Latn",
 }

@@ -17,3 +17,7 @@ venv/
 .env
 
 models/
+
+.venv-convert/
+
+.venv-lint/

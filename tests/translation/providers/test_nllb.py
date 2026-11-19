@@ -220,3 +220,14 @@ def test_works_through_translation_service(
 
     assert result.text == "translated:Hello"
     assert (result.source, result.target) == ("en", "ti")
+
+
+def test_oromo_uses_nllb_west_central_oromo_code(
+    ct2: _FakeCT2Module, provider: NllbTranslationProvider
+) -> None:
+    provider.translate(TranslationRequest(text="Hello", source="en", target="om"))
+    provider.translate(TranslationRequest(text="Hello", source="om", target="en"))
+
+    calls = ct2.translators[0].calls
+    assert calls[0][1] == [["gaz_Latn"]]
+    assert calls[1][0][0][0] == "gaz_Latn"

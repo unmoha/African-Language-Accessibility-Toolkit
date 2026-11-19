@@ -31,8 +31,8 @@ Open Local AI gives developers one stable translation interface while keeping th
 ## Quick start
 
 ```bash
-git clone https://github.com/unmoha/African-Language-Accessibility-Toolkit.git
-cd African-Language-Accessibility-Toolkit
+git clone https://github.com/unmoha/open-local-ai.git
+cd open-local-ai
 pip install -e ".[argos]"
 ```
 

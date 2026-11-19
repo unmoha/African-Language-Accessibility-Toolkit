@@ -25,6 +25,10 @@ classifiers = [
 argos = [
     "argostranslate>=1.11,<2",
 ]
+nllb = [
+    "ctranslate2>=4,<5",
+    "sentencepiece>=0.2,<1",
+]
 dev = [
     "mypy>=1.10,<2",
     "pytest>=8,<9",

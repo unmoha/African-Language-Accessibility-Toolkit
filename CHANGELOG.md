@@ -12,3 +12,4 @@ All notable changes to this project will be documented here.
 - Verified real Argos English-to-Spanish translation in an isolated environment; Ethiopian-language support remains unverified.
 - Documented explicit local model installation and offline provider behavior.
 - Renamed the repository to open-local-ai and added project links and keywords to the package metadata.
+- Added an optional NLLB-200 provider (CTranslate2) for local Amharic, Afaan Oromo, Tigrinya, and English translation. Quality is not yet evaluated with native speakers.

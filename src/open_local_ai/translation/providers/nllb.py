@@ -34,6 +34,8 @@ class _CT2Translator(Protocol):
         *,
         target_prefix: list[list[str]],
         beam_size: int,
+        no_repeat_ngram_size: int,
+        max_decoding_length: int,
     ) -> list[_CT2Result]: ...
 
 
@@ -77,13 +79,21 @@ class NllbTranslationProvider(TranslationProvider):
         *,
         device: str = "cpu",
         beam_size: int = 4,
+        no_repeat_ngram_size: int = 3,
+        max_decoding_length: int = 256,
     ) -> None:
         if beam_size < 1:
             raise InvalidInputError("beam_size must be at least 1.")
+        if no_repeat_ngram_size < 0:
+            raise InvalidInputError("no_repeat_ngram_size must not be negative.")
+        if max_decoding_length < 1:
+            raise InvalidInputError("max_decoding_length must be at least 1.")
         self._model_dir = Path(model_dir)
         self._tokenizer_path = Path(tokenizer_path)
         self._device = device
         self._beam_size = beam_size
+        self._no_repeat_ngram_size = no_repeat_ngram_size
+        self._max_decoding_length = max_decoding_length
         self._engine: tuple[_CT2Translator, _SpmProcessor] | None = None
 
     @property
@@ -137,10 +147,15 @@ class NllbTranslationProvider(TranslationProvider):
                 [source_code, *processor.encode_as_pieces(lines[i]), "</s>"]
                 for i in indexes
             ]
+            longest_input = max((len(tokens) for tokens in batch), default=0)
             results = translator.translate_batch(
                 batch,
                 target_prefix=[[target_code] for _ in batch],
                 beam_size=self._beam_size,
+                no_repeat_ngram_size=self._no_repeat_ngram_size,
+                max_decoding_length=min(
+                    self._max_decoding_length, 4 * longest_input + 16
+                ),
             )
             for index, result in zip(indexes, results, strict=True):
                 pieces = result.hypotheses[0]

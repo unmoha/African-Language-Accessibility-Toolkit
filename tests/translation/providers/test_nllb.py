@@ -26,6 +26,7 @@ class _FakeTranslator:
     def __init__(self, *, fail: bool) -> None:
         self.fail = fail
         self.calls: list[tuple[list[list[str]], list[list[str]], int]] = []
+        self.options: list[dict[str, int]] = []
 
     def translate_batch(
         self,
@@ -33,10 +34,18 @@ class _FakeTranslator:
         *,
         target_prefix: list[list[str]],
         beam_size: int,
+        no_repeat_ngram_size: int,
+        max_decoding_length: int,
     ) -> list[_FakeResult]:
         if self.fail:
             raise RuntimeError("engine exploded")
         self.calls.append((source, target_prefix, beam_size))
+        self.options.append(
+            {
+                "no_repeat_ngram_size": no_repeat_ngram_size,
+                "max_decoding_length": max_decoding_length,
+            }
+        )
         return [
             _FakeResult([[target_prefix[i][0], f"translated:{source[i][1]}"]])
             for i in range(len(source))
@@ -231,3 +240,34 @@ def test_oromo_uses_nllb_west_central_oromo_code(
     calls = ct2.translators[0].calls
     assert calls[0][1] == [["gaz_Latn"]]
     assert calls[1][0][0][0] == "gaz_Latn"
+
+
+def test_decoding_limits_are_passed_to_engine(
+    ct2: _FakeCT2Module, provider: NllbTranslationProvider
+) -> None:
+    provider.translate(TranslationRequest(text="Hello there", source="en", target="om"))
+
+    options = ct2.translators[0].options[0]
+    assert options["no_repeat_ngram_size"] == 3
+    assert options["max_decoding_length"] == 32
+
+
+def test_decoding_length_never_exceeds_configured_maximum(
+    ct2: _FakeCT2Module, tmp_path: Path
+) -> None:
+    model_dir = tmp_path / "model"
+    model_dir.mkdir()
+    tokenizer = tmp_path / "tokenizer.model"
+    tokenizer.write_bytes(b"fake")
+    limited = NllbTranslationProvider(model_dir, tokenizer, max_decoding_length=10)
+
+    limited.translate(TranslationRequest(text="Hello there", source="en", target="om"))
+
+    assert ct2.translators[0].options[0]["max_decoding_length"] == 10
+
+
+def test_invalid_decoding_limits_rejected(tmp_path: Path) -> None:
+    with pytest.raises(InvalidInputError):
+        NllbTranslationProvider(tmp_path, tmp_path / "t.model", max_decoding_length=0)
+    with pytest.raises(InvalidInputError):
+        NllbTranslationProvider(tmp_path, tmp_path / "t.model", no_repeat_ngram_size=-1)

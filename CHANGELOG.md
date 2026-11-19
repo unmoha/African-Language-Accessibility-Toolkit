@@ -11,3 +11,4 @@ All notable changes to this project will be documented here.
 - Added an optional Argos Translate provider with local installed-language and direct-pair detection.
 - Verified real Argos English-to-Spanish translation in an isolated environment; Ethiopian-language support remains unverified.
 - Documented explicit local model installation and offline provider behavior.
+- Renamed the repository to open-local-ai and added project links and keywords to the package metadata.

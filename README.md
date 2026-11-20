@@ -24,11 +24,12 @@ Open Local AI gives developers one stable translation interface while keeping th
 | Argos Translate provider | ✅ Done |
 | NLLB-200 provider (CTranslate2) | ✅ Implemented, unit-tested with fake runtimes |
 | Translation service | ✅ Done |
-| Real-model verification and quality review | 🚧 Not yet done |
-| CLI | 🚧 Planned |
+| Real-model runs on sample sentences (NLLB 600M) | ✅ Done, see notes below |
+| Native-speaker quality review | 🚧 Not yet done |
+| CLI (`languages`, `translate`) | ✅ Done |
 | Speech-to-text, text-to-speech, OCR | 🚧 Planned |
 
-> The NLLB provider has not yet been run against a real model in this repository's tests, and translation quality for Amharic, Afaan Oromo, and Tigrinya has not been reviewed by native speakers. Treat output as experimental.
+> The NLLB provider has been run against a real model (`nllb-200-distilled-600M`) on a small set of sample sentences. Amharic and Tigrinya outputs round-tripped sensibly, but one Afaan Oromo sample was mistranslated and an earlier run looped until decoding limits were added. Translation quality has not been reviewed by native speakers, so treat all output as experimental.
 
 ## Quick start
 
@@ -94,7 +95,23 @@ print(service.translate("Good morning, how are you?", "en", "am").text)
 
 Supported directions: any pair among `am`, `om`, `ti`, and `en`, except a language to itself. A missing model or tokenizer raises `ModelNotInstalledError`.
 
+Two decoding options guard against runaway output: `no_repeat_ngram_size` (default 3, set 0 to disable) and `max_decoding_length` (default 256, additionally capped relative to the input length). Afaan Oromo uses the NLLB code `gaz_Latn` (West Central Oromo), which does not cover every Oromo variety. Amharic and Tigrinya output defaulted to masculine singular forms in the sample run, which matters for accessibility use.
+
 > **License notice:** NLLB-200 model weights are published by Meta under a non-commercial license (CC-BY-NC 4.0 at the time of writing). Check the current license on the model page before any commercial or redistributed use. This repository's code is MIT-licensed and does not include model weights.
+
+## Command line
+
+Installing the package adds an `open-local-ai` command:
+
+```bash
+open-local-ai languages
+open-local-ai translate --from en --to am \
+  --model-dir models/nllb-200-distilled-600M-ct2 \
+  --tokenizer models/sentencepiece.bpe.model \
+  "Good morning, how are you?"
+```
+
+Instead of passing model paths each time, set `OPEN_LOCAL_AI_NLLB_MODEL_DIR` and `OPEN_LOCAL_AI_NLLB_TOKENIZER`. Text can also be piped on stdin, and `--provider argos` selects the Argos provider. Exit codes: `0` success, `1` an expected translation error (printed as `error: ...`), `2` a usage mistake.
 
 ## Languages
 
@@ -105,7 +122,7 @@ Supported directions: any pair among `am`, `om`, `ti`, and `en`, except a langua
 | Tigrinya | `ti` | ✅ | ❌ | ✅ | ❌ |
 | English | `en` | ✅ | ✅ | ✅ | ❌ |
 
-Canonical recognition does not imply provider support, and provider support does not imply translation quality.
+Canonical recognition does not imply provider support, and provider support does not imply translation quality. "Quality reviewed" stays unchecked until native speakers have reviewed real output.
 
 ## Architecture
 
@@ -132,9 +149,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Quality checks: `pytest` → `ruff check
 - [x] Core models, language metadata, provider contract
 - [x] Argos provider and translation service
 - [x] NLLB-200 provider
-- [ ] Run and document a real-model translation test
+- [x] Run a real-model translation test (NLLB 600M, sample sentences)
 - [ ] Native-speaker quality review for Amharic, Afaan Oromo, and Tigrinya
-- [ ] CLI
+- [x] CLI
 - [ ] Speech and OCR
 
 ## Contact

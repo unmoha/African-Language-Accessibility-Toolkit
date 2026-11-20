@@ -1,0 +1,83 @@
+name: Language quality report
+description: A translation is wrong, awkward, or inappropriate for a language or variety
+labels: ["language-quality"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Native-speaker feedback is the most valuable contribution to this project. Translation quality has not yet been reviewed by native speakers, so every report helps. Please use short, non-personal sentences and do not paste private or sensitive text.
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+        - Amharic (am)
+        - Afaan Oromo (om)
+        - Tigrinya (ti)
+        - English (en)
+    validations:
+      required: true
+  - type: dropdown
+    id: direction
+    attributes:
+      label: Direction
+      options:
+        - English to the language
+        - The language to English
+        - Between two Ethiopian languages
+    validations:
+      required: true
+  - type: input
+    id: model
+    attributes:
+      label: Provider and model
+      description: For example, NLLB with nllb-200-distilled-600M.
+    validations:
+      required: true
+  - type: textarea
+    id: source
+    attributes:
+      label: Source text
+      description: The exact text you translated.
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output you received
+    validations:
+      required: true
+  - type: textarea
+    id: suggested
+    attributes:
+      label: Better translation
+      description: What a fluent speaker would naturally say, if you can provide it.
+  - type: dropdown
+    id: problem
+    attributes:
+      label: Type of problem
+      options:
+        - Wrong meaning or mistranslation
+        - Wrong gender, number, or formality
+        - Wrong dialect or regional variety
+        - Spelling, script, or punctuation
+        - Repetition or garbled output
+        - Offensive or inappropriate wording
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: background
+    attributes:
+      label: Your background with this language (optional)
+      description: For example, native speaker, region, or professional translator. Share only what you are comfortable with.
+  - type: dropdown
+    id: reuse
+    attributes:
+      label: May we reuse this example as a test case?
+      description: If yes, the source text and your suggested translation may be added to the project's test data under the project's MIT license.
+      options:
+        - Yes
+        - No
+    validations:
+      required: true

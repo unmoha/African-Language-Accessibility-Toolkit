@@ -16,3 +16,4 @@ All notable changes to this project will be documented here.
 - Fixed the NLLB language code for Afaan Oromo (now gaz_Latn, West Central Oromo). Verified with a real model for Amharic and Tigrinya; Afaan Oromo is re-verified separately.
 - Added repetition blocking and an input-relative decoding length cap to the NLLB provider after a real-model run looped on a short Afaan Oromo sentence. Afaan Oromo output remains unreviewed by native speakers.
 - Added the open-local-ai command-line interface (languages and translate commands) with NLLB and Argos providers.
+- Added a security policy, issue templates (including a language quality report), and a pull request template.

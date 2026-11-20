@@ -1,0 +1,46 @@
+name: Bug report
+description: Something in the code or CLI does not work as documented
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. For translation quality problems in a specific language, please use the "Language quality report" form instead. Do not paste private or sensitive text.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: A short command or code snippet that shows the problem.
+    validations:
+      required: true
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Provider
+      options:
+        - NLLB
+        - Argos
+        - Not provider related
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, Python version, and open-local-ai version or commit.
+      placeholder: Windows 11, Python 3.12, commit abc1234
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Error output
+      description: Paste the full error message or traceback, if any.
+      render: text

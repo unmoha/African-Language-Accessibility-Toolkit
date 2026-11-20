@@ -31,15 +31,25 @@ def _build_parser() -> argparse.ArgumentParser:
 
     translate = commands.add_parser("translate", help="Translate text locally.")
     translate.add_argument(
-        "--from", "-f", dest="source", required=True, metavar="LANG",
+        "--from",
+        "-f",
+        dest="source",
+        required=True,
+        metavar="LANG",
         help="Source language code, for example en.",
     )
     translate.add_argument(
-        "--to", "-t", dest="target", required=True, metavar="LANG",
+        "--to",
+        "-t",
+        dest="target",
+        required=True,
+        metavar="LANG",
         help="Target language code, for example am.",
     )
     translate.add_argument(
-        "--provider", choices=("nllb", "argos"), default="nllb",
+        "--provider",
+        choices=("nllb", "argos"),
+        default="nllb",
         help="Translation provider (default: nllb).",
     )
     translate.add_argument(
@@ -99,9 +109,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     text = _read_text(args, parser)
     try:
         provider = _build_provider(args, parser)
-        result = TranslationService(provider).translate(
-            text, args.source, args.target
-        )
+        result = TranslationService(provider).translate(text, args.source, args.target)
     except OpenLocalAIError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
